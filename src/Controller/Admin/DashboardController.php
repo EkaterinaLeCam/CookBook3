@@ -2,6 +2,9 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Categorie;
+use App\Entity\Utilisateur;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -10,10 +13,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DashboardController extends AbstractDashboardController
 {
-    #[Route('/admin', name: 'admin')]
+    #[Route('/admin', name: 'admin', methods: ['GET', 'POST'])]
     public function index(): Response
     {
-        return parent::index();
+        return $this->render ('admin/index.html.twig');
 
         // Option 1. You can make your dashboard redirect to some common page of your backend
         //
@@ -37,10 +40,19 @@ class DashboardController extends AbstractDashboardController
         return Dashboard::new()
             ->setTitle('CookBook3');
     }
+//aficher sur la page d'admin modifier ou supprimer un élément
 
-    public function configureMenuItems(): iterable
-    {
-        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
-    }
+public function configureCrud(): Crud
+{
+return parent::configureCrud()
+->showEntityActionsInlined();
+}
+public function configureMenuItems(): iterable
+{
+    yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+    yield MenuItem::linkToCrud('Categorie', 'fas fa-angle-double-down', Categorie::class);
+    yield MenuItem::linkToCrud('Utilisateur', 'fas fa-user', Utilisateur::class);
+  
+}
+
 }
